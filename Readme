@@ -1,0 +1,52 @@
+
+some things that might be good to add
+- the model should be able to find relationships ( recommended) between 2 pages : could be based of similarities
+- also knows a fine line to say that this might be duplicates and not similar
+
+GraphRag Lite
+
+ Problem Statement
+
+Given a collection of documents, the system can:
+
+Answer questions
+Find related documents/pages
+Explain why they are related
+Detect likely duplicates vs merely similar content
+Traverse relationships across multiple documents
+
+Documents
+    │
+    ▼
+Ingestion
+    │
+    ▼
+Chunking
+    │
+    ▼
+Embeddings
+    │
+    ├──► Vector Store (FAISS)
+    │
+    └──► Relationship Builder
+                │
+                ▼
+          Similarity Graph
+            (NetworkX)
+                │
+                ▼
+          Relationship Engine
+                │
+                ▼
+            LLM Layer
+
+Datasets:
+
+ - arXiv Papers : duplicates are rare but the relationships are natural
+ - StackOverflow : duplicate detection
+
+Core Features:
+1. Question Answering : hybrid serach and symentic search
+2. Related  pages 
+3. Relationship Explanation
+4. Duplicate Detetctor
