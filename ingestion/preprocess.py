@@ -4,11 +4,12 @@ from sentence_transformers import SentenceTransformer
 import pandas as pd
 import time
 from pathlib import Path
+import pandas as pd
 
-model = SentenceTransformer("BAAI/bge-small-en-v1.5")
+model = SentenceTransformer("BAAI/bge-small-en-v1.5", local_files_only=True)
 kw_model = KeyBERT(model=model)
 docs = []
-MAX_DOCS = 2
+MAX_DOCS = 500
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
@@ -24,8 +25,9 @@ def iter_arxiv(path):
             if line:
                 yield json.loads(line)
 
+print("Loading arXiv snapshot...")
 dataset = iter_arxiv(SNAPSHOT)
-
+print("Done loading arXiv snapshot.")
 
 def build_doc(record, idx):
     title      = (record.get("title") or "").replace("\n", " ").strip()
@@ -82,3 +84,8 @@ for i, record in enumerate(dataset):
 
 pd.DataFrame(docs).to_parquet(DATA_DIR / "arxiv_processed.parquet")
 print(f"\nSaved {len(docs)} docs → {DATA_DIR / 'arxiv_processed.parquet'}")
+
+df = pd.read_parquet("data/arxiv_processed.parquet")
+record = df.iloc[0].to_dict()
+for k, v in record.items():
+    print(f"{k}: {v}")
